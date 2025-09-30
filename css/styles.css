@@ -8,28 +8,47 @@
 
 /* ==========================================
    CSS RESET & BASE STYLES
-   LAB11: Add core foundation styles here
    ========================================== */
-
-/* TODO LAB11: Add CSS reset and base styles */
-
-
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* base body styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+}
 /* ==========================================
    CONTAINER & LAYOUT
-   LAB11: Add container and layout styles here
    ========================================== */
-
-/* TODO LAB11: Add .container styles */
-
-
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
 /* ==========================================
    HEADER
-   LAB11: Add header with gradient background
    ========================================== */
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
 
-/* TODO LAB11: Add header, h1, and .subtitle styles */
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
 
-
+.subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
 /* ==========================================
    MAIN CONTENT & SECTIONS
    LAB11: Add section containers and spacing
