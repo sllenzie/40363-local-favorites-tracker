@@ -36,4 +36,36 @@ console.log('Data Types:');
 console.log('  name is a', typeof sampleFavorite.name);
 console.log('  rating is a', typeof sampleFavorite.rating);
 
-console.log('Ready for LAB13: Functions & DOM Manipulation!');
+let rating1 = 5;
+let rating2 = 4;
+let rating3 = 5;
+
+let totalRating = rating1 + rating2 + rating3;
+let averageRating = totalRating / 3;
+
+console.log('Total Rating:', totalRating);
+console.log('Average Rating:', averageRating);
+console.log('Average (rounded):', averageRating.toFixed(1));
+
+let placeName = 'Starbucks';
+let category = 'coffee';
+let rating = 5;
+let notes = 'Great wifi';
+
+let favorite4 = {
+    name: 'AMC Clearfork',
+    category: 'entertainment',  // Try: fitness, services, shopping
+    rating: 4,
+    notes: 'Great place for dinner and a movie!'
+};
+
+let favorite5 = {
+    name: 'Ampersand',
+    category: 'coffee',
+    rating: 5,
+    notes: 'Great matcha, better kolaches.'
+};
+
+// Display both with formatted strings
+console.log(favorite4.name + ' (' + favorite4.category + ')');
+console.log(favorite5.name + ' (' + favorite5.category + ')');
