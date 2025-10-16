@@ -104,3 +104,9 @@ console.log('Event listener attached - form is ready!');
 
 // Display empty message when page first loads
 displayFavorites();
+
+// how can i attach cookies or something like that so that the list of favorites stays even if the page is refreshed?
+
+// how can i make it so that the user can delete a favorite from the list?
+
+// how can i make it so that the user can edit a favorite from the list?
