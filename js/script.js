@@ -27,7 +27,7 @@ function displayFavorites() {
         return;
     }
 
-    // Loop through each favorite and create HTML
+   // Loop through each favorite and create HTML
 favorites.forEach(function(favorite, index) {
     // Create the star rating display
     let starsDisplay = '⭐'.repeat(favorite.rating);
@@ -48,8 +48,7 @@ favorites.forEach(function(favorite, index) {
 
     // Add this card to the favorites list
     favoritesList.innerHTML += cardHTML;
-    });
-
+});
     console.log('Displayed', favorites.length, 'favorite(s)');
 }
 
@@ -73,7 +72,6 @@ function deleteFavorite(index) {
         console.log('Deletion cancelled by user');
     }
 }
-
 
 // Function to handle adding a new favorite
 function addFavorite(event) {
