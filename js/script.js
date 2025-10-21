@@ -28,27 +28,52 @@ function displayFavorites() {
     }
 
     // Loop through each favorite and create HTML
-    favorites.forEach(function(favorite) {
-        // Create the star rating display
-        let starsDisplay = '⭐'.repeat(favorite.rating);
+favorites.forEach(function(favorite, index) {
+    // Create the star rating display
+    let starsDisplay = '⭐'.repeat(favorite.rating);
 
-        // Build the HTML for this favorite card
-        const cardHTML = `
-            <div class="favorite-card">
-                <h3>${favorite.name}</h3>
-                <span class="favorite-category">${favorite.category}</span>
-                <div class="favorite-rating">${starsDisplay} (${favorite.rating}/5)</div>
-                <p class="favorite-notes">${favorite.notes}</p>
-                <p class="favorite-date">Added: ${favorite.dateAdded}</p>
+    // Build the HTML for this favorite card
+    const cardHTML = `
+        <div class="favorite-card">
+            <h3>${favorite.name}</h3>
+            <span class="favorite-category">${favorite.category}</span>
+            <div class="favorite-rating">${starsDisplay} (${favorite.rating}/5)</div>
+            <p class="favorite-notes">${favorite.notes}</p>
+            <p class="favorite-date">Added: ${favorite.dateAdded}</p>
+            <div class="favorite-actions">
+                <button class="btn btn-danger" onclick="deleteFavorite(${index})">Delete</button>
             </div>
-        `;
+        </div>
+    `;
 
-        // Add this card to the favorites list
-        favoritesList.innerHTML += cardHTML;
+    // Add this card to the favorites list
+    favoritesList.innerHTML += cardHTML;
     });
 
     console.log('Displayed', favorites.length, 'favorite(s)');
 }
+
+// Function to delete a favorite by index
+function deleteFavorite(index) {
+    console.log('Deleting favorite at index:', index);
+    console.log('Favorite to delete:', favorites[index].name);
+
+    // Confirm deletion with user
+    const favorite = favorites[index];
+    const confirmDelete = confirm(`Are you sure you want to delete "${favorite.name}"?`);
+
+    if (confirmDelete) {
+        // Remove from array
+        favorites.splice(index, 1);
+        console.log('Favorite deleted. Total remaining:', favorites.length);
+
+        // Re-apply current search/filter
+        searchFavorites();
+    } else {
+        console.log('Deletion cancelled by user');
+    }
+}
+
 
 // Function to handle adding a new favorite
 function addFavorite(event) {
