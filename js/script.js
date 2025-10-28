@@ -1,10 +1,10 @@
 
 // ==========================================
 // PROJECT 2: LOCAL FAVORITES TRACKER
-// LAB13: Functions and DOM Manipulation
+// LAB15: PERSISTING DATA WITH localStorage
 // ==========================================
 
-// Array to store all favorites (we'll use this in LAB14)
+// Array to store all favorites
 let favorites = [];
 
 // Get references to DOM elements
@@ -13,6 +13,38 @@ const favoritesList = document.getElementById('favorites-list');
 
 console.log('Form:', form);
 console.log('Favorites list container:', favoritesList);
+
+// Function to save favorites to localStorage
+function saveFavorites() {
+    try {
+        localStorage.setItem('localFavorites', JSON.stringify(favorites));
+        console.log('Favorites saved to localStorage');
+        console.log('Saved', favorites.length, 'favorites');
+    } catch (error) {
+        console.error('Error saving to localStorage:', error);
+        alert('Unable to save favorites. Your browser may have storage disabled.');
+    }
+}
+
+// Function to load favorites from localStorage
+function loadFavorites() {
+    try {
+        const savedData = localStorage.getItem('localFavorites');
+
+        if (savedData) {
+            favorites = JSON.parse(savedData);
+            console.log('Favorites loaded from localStorage');
+            console.log('Loaded', favorites.length, 'favorites');
+        } else {
+            console.log('No saved favorites found');
+            favorites = [];
+        }
+    } catch (error) {
+        console.error('Error loading from localStorage:', error);
+        console.log('Starting with empty favorites array');
+        favorites = [];
+    }
+}
 
 // Function to display all favorites on the page
 function displayFavorites() {
@@ -33,6 +65,64 @@ function displayFavorites() {
     searchFavorites();
 }
 
+// Function to handle adding a new favorite
+function addFavorite(event) {
+    event.preventDefault();  // Prevent page reload
+
+    console.log('Add Favorite button clicked!');
+
+    // Step 1: Get values from form inputs
+    const nameInput = document.getElementById('name');
+    const categoryInput = document.getElementById('category');
+    const ratingInput = document.getElementById('rating');
+    const notesInput = document.getElementById('notes');
+
+    const nameValue = nameInput.value;
+    const categoryValue = categoryInput.value;
+    const ratingValue = ratingInput.value;
+    const notesValue = notesInput.value;
+
+    // Step 2: Log values to see what we captured
+    console.log('Name:', nameValue);
+    console.log('Category:', categoryValue);
+    console.log('Rating:', ratingValue);
+    console.log('Notes:', notesValue);
+
+    // Step 3: Create a favorite object
+    const newFavorite = {
+        name: nameValue,
+        category: categoryValue,
+        rating: ratingValue,
+        notes: notesValue,
+        dateAdded: new Date().toLocaleDateString()
+    };
+
+    console.log('Created favorite object:', newFavorite);
+
+    // Step 4: Add to favorites array
+    favorites.push(newFavorite);
+    console.log('Total favorites:', favorites.length);
+
+    // 4a: Save to localStorage
+    saveFavorites();
+
+    // 4b: Clear the form
+    form.reset();
+
+    // 4c: Display updated list (resets filters)
+    displayFavorites();
+
+    console.log('Favorite added successfully!');
+
+    // Step 5: Clear the form for next entry
+    form.reset();
+    console.log('Form reset - ready for next favorite!');
+
+    // Step 6: Display the updated favorites list
+    displayFavorites();
+}
+
+
 // Function to delete a favorite by index
 function deleteFavorite(index) {
     console.log('Deleting favorite at index:', index);
@@ -42,15 +132,16 @@ function deleteFavorite(index) {
     const favorite = favorites[index];
     const confirmDelete = confirm(`Are you sure you want to delete "${favorite.name}"?`);
 
-    if (confirmDelete) {
+        if (confirmDelete) {
         // Remove from array
         favorites.splice(index, 1);
         console.log('Favorite deleted. Total remaining:', favorites.length);
 
+        // Save to localStorage
+        saveFavorites();
+
         // Re-apply current search/filter
         searchFavorites();
-    } else {
-        console.log('Deletion cancelled by user');
     }
 }
 
@@ -119,51 +210,27 @@ function searchFavorites() {
     });
 }
 
-// Function to handle adding a new favorite
-function addFavorite(event) {
-    event.preventDefault();  // Prevent page reload
+// Function to clear all favorites
+function clearAllFavorites() {
+    // Confirm with user
+    const confirmClear = confirm('Are you sure you want to delete ALL favorites? This cannot be undone!');
 
-    console.log('Add Favorite button clicked!');
+    if (confirmClear) {
+        // Clear the array
+        favorites = [];
+        console.log('All favorites cleared');
 
-    // Step 1: Get values from form inputs
-    const nameInput = document.getElementById('name');
-    const categoryInput = document.getElementById('category');
-    const ratingInput = document.getElementById('rating');
-    const notesInput = document.getElementById('notes');
+        // Clear from localStorage
+        localStorage.removeItem('localFavorites');
+        console.log('localStorage cleared');
 
-    const nameValue = nameInput.value;
-    const categoryValue = categoryInput.value;
-    const ratingValue = ratingInput.value;
-    const notesValue = notesInput.value;
+        // Display empty state
+        displayFavorites();
 
-    // Step 2: Log values to see what we captured
-    console.log('Name:', nameValue);
-    console.log('Category:', categoryValue);
-    console.log('Rating:', ratingValue);
-    console.log('Notes:', notesValue);
-
-    // Step 3: Create a favorite object (like LAB12!)
-    const newFavorite = {
-        name: nameValue,
-        category: categoryValue,
-        rating: ratingValue,
-        notes: notesValue,
-        dateAdded: new Date().toLocaleDateString()
-    };
-
-    console.log('Created favorite object:', newFavorite);
-
-    // Step 4: Add to favorites array (for LAB14)
-    favorites.push(newFavorite);
-    console.log('Total favorites:', favorites.length);
-    console.log('All favorites:', favorites);
-
-    // Step 5: Clear the form for next entry
-    form.reset();
-    console.log('Form reset - ready for next favorite!');
-
-    // Step 6: Display the updated favorites list
-    displayFavorites();
+        alert('All favorites have been deleted.');
+    } else {
+        console.log('Clear all cancelled by user');
+    }
 }
 
 // Connect the addFavorite function to the form submit event
@@ -179,12 +246,23 @@ searchInput.addEventListener('input', searchFavorites);
 const categoryFilter = document.getElementById('category-filter');
 categoryFilter.addEventListener('change', searchFavorites);
 
+// Connect clear all button
+const clearAllBtn = document.getElementById('clear-all-btn');
+if (clearAllBtn) {
+    clearAllBtn.addEventListener('click', clearAllFavorites);
+    console.log('Clear all button connected');
+}
+
 console.log('Search and filter event listeners attached!');
 
-// Display empty message when page first loads
+// Load saved favorites from localStorage on startup
+loadFavorites();
+
+// Display the loaded favorites (or empty message)
 displayFavorites();
 
 // how can i attach cookies or something like that so that the list of favorites stays even if the page is refreshed?
+//achieved!!! used localstorage to save and load the favorites array
 
 // how can i make it so that the user can delete a favorite from the list?
 // ACHIEVED! i just needed to wait patiently
